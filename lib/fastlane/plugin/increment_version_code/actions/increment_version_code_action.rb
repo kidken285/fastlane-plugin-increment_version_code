@@ -129,7 +129,7 @@ module Fastlane
                                    description: "If the version code is set in an ext constant, specify the constant name (optional)",
                                       optional: true,
                                           type: String,
-                                 default_value: "versionCode")
+                                 default_value: "versionCode"),
              FastlaneCore::ConfigItem.new(key: :product_flavor,
                                      env_name: "PRODUCT_FLAVOR",
                                   description: "The name of the product flavor (optional)",
