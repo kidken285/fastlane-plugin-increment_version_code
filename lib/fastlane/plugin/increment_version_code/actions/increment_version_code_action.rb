@@ -16,7 +16,7 @@ module Fastlane
         foundProductFlavor = product_flavor == nil
         if gradle_file_path != nil
             UI.message("The increment_version_code plugin will use gradle file at (#{gradle_file_path})!")
-            new_version_code = incrementVersion(gradle_file_path, new_version_code, constant_name, foundProductFlavor, product_flavor)
+            new_version_code = incrementVersion(gradle_file_path, new_version_code, constant_name, product_flavor)
         else
             app_folder_name ||= params[:app_folder_name]
             UI.message("The get_version_code plugin is looking inside your project folder (#{app_folder_name})!")
@@ -25,7 +25,7 @@ module Fastlane
             #foundVersionCode = "false"
             Dir.glob("**/#{app_folder_name}/build.gradle") do |path|
                 UI.message(" -> Found a build.gradle file at path: (#{path})!")
-                new_version_code = incrementVersion(path, new_version_code, constant_name, foundProductFlavor, product_flavor)
+                new_version_code = incrementVersion(path, new_version_code, constant_name, product_flavor)
             end
 
         end
