@@ -66,6 +66,9 @@ module Fastlane
                    #    else
                    #    temp_file.puts line
                    # end
+                    if line.include? product_flavor and not foundProductFlavor
+                        foundProductFlavor = true
+                      end
 
                     if foundProductFlavor and line.include? "versionCode " and foundVersionCode=="false"
 
