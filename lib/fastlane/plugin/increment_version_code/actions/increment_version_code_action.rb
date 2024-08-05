@@ -8,10 +8,12 @@ module Fastlane
 
         version_code = "0"
         new_version_code ||= params[:version_code]
-
+        product_flavor ||= params[:product_flavor]
         constant_name ||= params[:ext_constant_name]
 
         gradle_file_path ||= params[:gradle_file_path]
+
+        foundProductFlavor = product_flavor == nil
         if gradle_file_path != nil
             UI.message("The increment_version_code plugin will use gradle file at (#{gradle_file_path})!")
             new_version_code = incrementVersion(gradle_file_path, new_version_code, constant_name)
@@ -49,20 +51,36 @@ module Fastlane
               temp_file = Tempfile.new('fastlaneIncrementVersionCode')
               File.open(path, 'r') do |file|
                   file.each_line do |line|
-                      if line.include? constant_name and foundVersionCode=="false"
-                          UI.message(" -> line: (#{line})!")
-                        versionComponents = line.strip.split(' ')
-                        version_code = versionComponents[versionComponents.length-1].tr("\"","")
-                        if new_version_code <= 0
-                            new_version_code = version_code.to_i + 1
-                        end
-                        if !!(version_code =~ /\A[-+]?[0-9]+\z/)
-                            line.replace line.sub(version_code, new_version_code.to_s)
-                            foundVersionCode = "true"
-                        end
-                        temp_file.puts line
-                      else
-                      temp_file.puts line
+                   #    if line.include? constant_name and foundVersionCode=="false"
+                   #        UI.message(" -> line: (#{line})!")
+                   #      versionComponents = line.strip.split(' ')
+                   #      version_code = versionComponents[versionComponents.length-1].tr("\"","")
+                   #      if new_version_code <= 0
+                   #          new_version_code = version_code.to_i + 1
+                   #      end
+                   #      if !!(version_code =~ /\A[-+]?[0-9]+\z/)
+                   #          line.replace line.sub(version_code, new_version_code.to_s)
+                   #          foundVersionCode = "true"
+                   #      end
+                   #      temp_file.puts line
+                   #    else
+                   #    temp_file.puts line
+                   # end
+
+                    if foundProductFlavor and line.include? "versionCode " and foundVersionCode=="false"
+
+                       versionComponents = line.strip.split(' ')
+                       version_code = versionComponents[1].tr("\"","")
+                       if new_version_code <= 0
+                           new_version_code = version_code.to_i + 1
+                       end
+                       if !!(version_code =~ /\A[-+]?[0-9]+\z/)
+                           line.replace line.sub(version_code, new_version_code.to_s)
+                           foundVersionCode = "true"
+                       end
+                       temp_file.puts line
+                   else
+                       temp_file.puts line
                    end
               end
               file.close
