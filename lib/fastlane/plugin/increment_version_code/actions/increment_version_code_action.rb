@@ -130,6 +130,12 @@ module Fastlane
                                       optional: true,
                                           type: String,
                                  default_value: "versionCode")
+             FastlaneCore::ConfigItem.new(key: :product_flavor,
+                                     env_name: "PRODUCT_FLAVOR",
+                                  description: "The name of the product flavor (optional)",
+                                     optional: true,
+                                         type: String,
+                                default_value: nil)    
           ]
       end
 
